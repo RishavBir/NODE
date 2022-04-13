@@ -16,7 +16,7 @@ const userSchema = new mongoose.Schema( {
     age: Number,
     // isIndian: Boolean,
     // parentsInfo: {
-    //     motherName: String,
+    //     motherName: Number,
     //     fatherName: String,
     //     siblingName: String
     // },

@@ -3,14 +3,13 @@ const mongoose = require('mongoose');
 const bookSchema = new mongoose.Schema( {
     bookName: String, 
     authorName: String, 
-    tags: [String],
-    
-    isPublished: Boolean,
+    year: Number,
     prices: {
         indianPrice: String,
-        europePrice: String,
+        dollarPrice: String,
     },
-    sales: {type: Number, default: 10}
+    totalPages: Number,
+    stockAvailable: Boolean
 }, { timestamps: true });
 
 
