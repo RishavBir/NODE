@@ -2,8 +2,13 @@
 
 const checkFreeUser = function(req,res,next) {
 
-    let header = req.body.isFreeAppUser
-    if( header != undefined) {
+
+
+    let header = req.headers["isfreeappuser"]
+
+    console.log(header)
+
+    if( header) {
         next()
     }
     else {
@@ -11,7 +16,7 @@ const checkFreeUser = function(req,res,next) {
     }
 
     console.log(req.body)
-    next()
+    
 }
 
 module.exports.checkFreeUser = checkFreeUser

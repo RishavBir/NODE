@@ -22,9 +22,9 @@
 
 
 
-const ProductModel = require("../models/productModel")
-const UserModel= require("../models/userModel")
-const OrderModel = require ("../models/orderModel")
+const productModel = require("../models/productModel")
+const userModel= require("../models/userModel")
+const orderModel = require ("../models/orderModel")
 
 
 
@@ -33,7 +33,7 @@ const OrderModel = require ("../models/orderModel")
 
 const createProduct= async function (req, res) {                                  // First API
     let data= req.body
-    let savedData= await ProductModel.create(data)
+    let savedData= await productModel.create(data)
     res.send({msg: savedData})
    }
 
@@ -42,7 +42,7 @@ const createProduct= async function (req, res) {                                
 
 const createUser= async function (req, res) {                                    // Second API
  let data= req.body
- let savedData= await UserModel.create(data)
+ let savedData= await userModel.create(data)
  res.send({msg: savedData})
 }
 
@@ -88,19 +88,43 @@ const createUser= async function (req, res) {                                   
 
 const createOrder = async function(req,res){                        
     let data = req.body
-    let userId = req.body.userId
-    let productId = req.body.productId
-    let header = req.headers["isFreeAppUser"]
+    // let userId = req.body.userId                          
+    // let productId = req.body.productId
+    
+    console.log("I am in Controller")
+    const { userId, productId } = data 
+
+    let header = req.headers["isfreeappuser"]
+    console.log(header)
     let price = await productModel.find({productId})
     let userValidation  = await userModel.exists({userId})
     let productValidation = await productModel.exists({productId})
     if(userValidation){
         if(productValidation){
-            let purchase = await orderModel.create(data)
-            if(header == true){
-                await userModel.find({_id : userId}).update({balance: `${balance}-${price}`},{new:true})
+           // let purchase = await orderModel.create(data)
+            if(header == "true"){
+                req.body.isFreeAppUser = header
+                req.body.amount = 0
+                let purchase = await orderModel.create(req.body)
+
+                res.send({success : purchase})
+
+               // await userModel.find({_id : userId}).update({balance: `${balance}-${price}`},{new:true})
+
+            
+            }else{
+                console.log("else")
+                //let amount = price.price
+                req.body.isFreeAppUser = header
+                let abc= 100
+                req.body.amount = abc ; //price.price
+                // req.body.amount = 0
+                let purchase = await orderModel.create(req.body)
+
+                res.send({success : purchase})
+                
             }
-            res.send({success : purchase})
+            
         } else{
             res.send({err: "the product is not present"})}
     }else{
